@@ -1,0 +1,218 @@
+{
+    "domain": "NielsenGB",
+    "entity": "STG_ProfiseeMappingServicesInput-NielsenGB-Silver-SparklingWine",
+    "layer": "Interface",
+    "process_requested": "transformation",
+    "market": "SparklingWine",
+    "partition": [
+        "SparklingWine"
+    ],
+    "dependencyInbound": [
+        "STG_ProductDim-NielsenGB-Silver-SparklingWine",
+        "STG_AggregatedData-NielsenGB-Silver-SparklingWine"
+    ],
+    "dependencyOutbound": [],
+    "D0_common_conf": {
+        "use-case": "GDF",
+        "prcs-name": "interface-process",
+        "table_name": "STG_ProfiseeMappingServicesInput_SparklingWine"
+    },
+    "D1_data_extract_process": {
+        "type": "data_extract_process",
+        "sourceList": [
+            "source1",
+            "source2",
+            "source3"
+        ],
+        "source1": {
+            "type": "staging-zone",
+            "storage_account_name": "dlsgdadev",
+            "container": "staging",
+            "read-type": "delta-load",
+            "file-format": "parquet",
+            "delimiter": "",
+            "path": "/staging/global/transactional/marketing/marketing/marketshare/nielsenGB/SparklingWine/STG_AggregatedData_SparklingWine/",
+            "fileName": "part-",
+            "cols": [
+                "_Product_uid",
+                "Sales_loccur",
+                "Sales_qty",
+                "Category_DB_name"
+            ],
+            "volume": "stg_aggregateddata_sparklingwine"
+        },
+        "source2": {
+            "type": "staging-zone",
+            "storage_account_name": "dlsgdadev",
+            "container": "staging",
+            "read-type": "delta-load",
+            "file-format": "parquet",
+            "delimiter": "",
+            "path": "/staging/global/transactional/marketing/marketing/marketshare/nielsenGB/SparklingWine/STG_ProductDim_SparklingWine/",
+            "fileName": "part-",
+            "cols": [
+                "_Product_uid",
+                "_Product_MS_uid",
+                "Brand_Division_desc",
+                "Sub_Brand_Division_desc",
+                "Colour_desc",
+                "Sweetness_of_Alcoholic_Beverage_desc",
+                "Container_Size_desc"
+            ],
+            "filter": {
+                "custom-query": "Hierarchy_Level_num = 7"
+            },
+            "combine": {
+                "type": "join",
+                "base-table-key": [
+                    "_Product_uid"
+                ],
+                "source-table-key": [
+                    "_Product_uid"
+                ],
+                "join-type": "inner"
+            },
+            "volume": "stg_productdim_sparklingwine"
+        },
+        "source3": {
+            "type": "silver-zone",
+            "source-partition-by": "Source_Country_desc, Source_Category_desc",
+            "storage_account_name": "dlsgdadev",
+            "container": "silver",
+            "file-format": "delta",
+            "path": "md_mkt.UPH_Product_Mapping",
+            "fileName": "",
+            "enable-multiline": "false",
+            "infer-schema": "false",
+            "cols": [
+                "Source_Product_uid",
+                "Source_Product_name"
+            ],
+            "alias": [
+                "_Source_Product_uid",
+                "_Source_Product_name"
+            ],
+            "filter": {
+                "custom-query": "Source_Country_desc = 'GB'"
+            },
+            "combine": {
+                "type": "join",
+                "base-table-key": [
+                    "_Product_uid"
+                ],
+                "source-table-key": [
+                    "_Source_Product_uid"
+                ],
+                "join-type": "left"
+            }
+        }
+    },
+    "D2_data_transform_process": {
+        "type": "data_transform_process",
+        "transform-list": [
+            "T1"
+        ],
+        "T1": {
+            "type": "custom-sql-query",
+            "def": {
+                "interim-query": "select _Product_uid, sum(Sales_loccur) as Sales_loccur, sum(Sales_qty) as Sales_qty, (select sum(Sales_loccur) from hash_df) as Total_Sales_loccur, (select sum(Sales_qty) from hash_df) as Total_Sales_qty, Category_DB_name, _Product_MS_uid, Brand_Division_desc, Sub_Brand_Division_desc, Colour_desc, Sweetness_of_Alcoholic_Beverage_desc, Container_Size_desc from hash_df where _Source_Product_name is null group by _Product_uid, Category_DB_name, _Product_MS_uid, Brand_Division_desc, Sub_Brand_Division_desc, Colour_desc, Sweetness_of_Alcoholic_Beverage_desc, Container_Size_desc",
+                "final-query": "select _Product_uid as Source_Product_uid, _Product_uid as Code, _Product_MS_uid as Source_Product_MS_uid, concat(Sub_Brand_Division_desc,' ',case when Colour_desc is null then '' else Colour_desc end,' ',case when Sweetness_of_Alcoholic_Beverage_desc is null then '' else Sweetness_of_Alcoholic_Beverage_desc end,' ',case when Container_Size_desc is null then '' else Container_Size_desc end) as Source_Product_name, Container_Size_desc as Source_Bottle_Size_desc, Category_DB_name as Source_Category_desc, 'GB' as Source_Country_desc, null as Source_Owner_desc, Brand_Division_desc as Source_Brand_desc, null as Source_Barcode_code, Sales_qty as Source_Sales_qty, Sales_loccur as Source_Sales_amt, (Sales_qty/Total_Sales_qty)*100 as Source_Sales_qty_share, (Sales_loccur/Total_Sales_loccur)*100 as Source_Sales_amt_share, 'Nielsen' as Source_System_name from interm_df"
+            }
+        }
+    },
+    "D3_load_data_process": {
+        "type": "load_data_process",
+        "mode-of-write": "append",
+        "overwrite-schema": "true",
+        "merge-schema": "true",
+        "container": "interface",
+        "target-path": "profisee/ProductMapping/NielsenGB_SparklingWine/",
+        "target-format": "csv",
+        "target-table": "ProfiseeMappingServicesInput",
+        "loadType": "full",
+        "partition-count": "1",
+        "target-schema": {
+            "Source_Product_uid": {
+                "colName": "Source_Product_uid",
+                "type": "string"
+            },
+            "Code": {
+                "colName": "Code",
+                "type": "string"
+            },
+            "Source_Product_MS_uid": {
+                "colName": "Source_Product_MS_uid",
+                "type": "string"
+            },
+            "Source_Product_name": {
+                "colName": "Source_Product_name",
+                "type": "string"
+            },
+            "Source_Bottle_Size_desc": {
+                "colName": "Source_Bottle_Size_desc",
+                "type": "string"
+            },
+            "Source_Category_desc": {
+                "colName": "Source_Category_desc",
+                "type": "string"
+            },
+            "Source_Country_desc": {
+                "colName": "Source_Country_desc",
+                "type": "string"
+            },
+            "Source_Owner_desc": {
+                "colName": "Source_Owner_desc",
+                "type": "string"
+            },
+            "Source_Brand_desc": {
+                "colName": "Source_Brand_desc",
+                "type": "string"
+            },
+            "Source_Barcode_code": {
+                "colName": "Source_Barcode_code",
+                "type": "string"
+            },
+            "Source_Sales_qty": {
+                "colName": "Source_Sales_qty",
+                "type": "decimal(18,3)"
+            },
+            "Source_Sales_amt": {
+                "colName": "Source_Sales_amt",
+                "type": "decimal(18,3)"
+            },
+            "Source_Sales_qty_share": {
+                "colName": "Source_Sales_qty_share",
+                "type": "decimal(18,3)"
+            },
+            "Source_Sales_amt_share": {
+                "colName": "Source_Sales_amt_share",
+                "type": "decimal(18,3)"
+            },
+            "Source_System_name": {
+                "colName": "Source_System_name",
+                "type": "string"
+            }
+        },
+        "volume": "nielsengb_sparklingwine",
+        "schema": "profisee_outbound"
+    },
+    "D4_data_load_post_process": {
+        "type": "data_load_post_process",
+        "post-process-list": [
+            "P1"
+        ],
+        "P1": {
+            "type": "file-rename",
+            "def": {
+                "target-storage-account-name": "dlsgdadev",
+                "target-container": "interface",
+                "target-path": "/profisee/ProductMapping/NielsenGB_SparklingWine/",
+                "target-format": "csv",
+                "target-table": "ProfiseeMappingServicesInput",
+                "target-timestamp-suffix": "true",
+                "volume": "nielsengb_sparklingwine",
+                "schema": "profisee_outbound"
+            }
+        }
+    }
+}

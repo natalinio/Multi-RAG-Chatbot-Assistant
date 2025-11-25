@@ -1,0 +1,128 @@
+{
+    "domain": "Profisee",
+    "entity": "UPHProductV2-Profisee-Silver-GLB",
+    "layer": "Silver",
+    "process_requested": "transformation",
+    "market": "GLB",
+    "partition": [
+        "GLB"
+    ],
+    "dependencyInbound": [
+        "Product-Profisee-Bronze-GLB"
+    ],
+    "dependencyOutbound": [],
+    "D0_common_conf": {
+        "use-case": "GDF",
+        "prcs-name": "silver-process",
+        "table_name": "UPH_Product_V2"
+    },
+    "D1_data_extract_process": {
+        "type": "data_extract_process",
+        "sourceList": [
+            "source1"
+        ],
+        "source1": {
+            "type": "bronze-zone",
+            "storage_account_name": "dlsgdadev",
+            "container": "bronze",
+            "read-type": "full-load",
+            "file-format": "json",
+            "path": "/profisee/Product/",
+            "fileName": "Product",
+            "volume": "product"
+        }
+    },
+    "D2_data_transform_process": {
+        "type": "data_transform_process",
+        "transform-list": [
+            "T1",
+            "T2",
+            "T3"
+        ],
+        "T1": {
+            "type": "spark-select-expression",
+            "def": {
+                "sql-like-expression": "\"pageNumber\", \"resultCount\", \"totalRecords\", \"explode(data) as exploded_data\""
+            }
+        },
+        "T2": {
+            "type": "spark-select-expression",
+            "def": {
+                "sql-like-expression": "\"pageNumber\", \"resultCount\", \"totalRecords\", \"exploded_data.*\""
+            }
+        },
+        "T3": {
+            "type": "custom-sql-query",
+            "def": {
+                "final-query": "select `name` as Name, `code` as Code, `mdG_Product_Match_Key_code` as MDG_Product_Match_Key_code, `promo_flag` as Promo_flag, `promo_Type_desc` as Promo_Type_desc, `importance_flag` as Importance_flag, `upH_Liquid_code` as UPH_Liquid_code, `container_Size_cl` as Container_Size_cl, `no_Size_flag` as No_Size_flag, `_Record_Source` as _Record_Source, CURRENT_TIMESTAMP() as _creation_date_tst, CURRENT_TIMESTAMP() as _last_update_date_tst from interm_df where `_Record_Source` = 'Profisee'"
+            }
+        }
+    },
+    "D3_load_data_process": {
+        "type": "load_data_process",
+        "mode-of-write": "",
+        "overwrite-schema": "true",
+        "merge-schema": "true",
+        "container": "silver",
+        "target-path": "md_mkt.UPH_Product",
+        "target-format": "delta",
+        "target-table": "UPH_Product",
+        "loadType": "incremental",
+        "upsert-excluded-columns": [
+            "_creation_date_tst"
+        ],
+        "primaryKey": [
+            "Code"
+        ],
+        "target-schema": {
+            "Name": {
+                "colName": "Name",
+                "type": "string"
+            },
+            "Code": {
+                "colName": "Code",
+                "type": "bigint"
+            },
+            "MDG_Product_Match_Key_code": {
+                "colName": "MDG_Product_Match_Key_code",
+                "type": "string"
+            },
+            "Promo_flag": {
+                "colName": "Promo_flag",
+                "type": "string"
+            },
+            "Promo_Type_desc": {
+                "colName": "Promo_Type_desc",
+                "type": "string"
+            },
+            "Importance_flag": {
+                "colName": "Importance_flag",
+                "type": "string"
+            },
+            "UPH_Liquid_code": {
+                "colName": "UPH_Liquid_code",
+                "type": "bigint"
+            },
+            "Container_Size_cl": {
+                "colName": "Container_Size_cl",
+                "type": "string"
+            },
+            "No_Size_flag": {
+                "colName": "No_Size_flag",
+                "type": "string"
+            },
+            "_Record_Source": {
+                "colName": "_Record_Source",
+                "type": "string"
+            },
+            "_creation_date_tst": {
+                "colName": "_creation_date_tst",
+                "type": "timestamp"
+            },
+            "_last_update_date_tst": {
+                "colName": "_last_update_date_tst",
+                "type": "timestamp"
+            }
+        }
+    }
+}

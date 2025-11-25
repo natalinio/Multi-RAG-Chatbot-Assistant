@@ -1,0 +1,3 @@
+# Keep frontend directory
+!frontend/
+!frontend/**

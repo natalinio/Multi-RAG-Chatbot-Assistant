@@ -1,0 +1,43 @@
+{
+    "domain": "SAPBW",
+    "entity": "GTNSemanticModel-SAPBW-Gold-GTN",
+    "layer": "Gold",
+    "process_requested": "semantic_model_refresh",
+    "market": "GTN",
+    "partition": [
+        "GTN"
+    ],
+    "dependencyInbound": [
+        "TRGtNActuals-SAPBW-Silver-GTN",
+        "TRGtNAnaplanVersion-SAPBW-Silver-GTN",
+        "TRGtNBLIC-SAPBW-Silver-GTN",
+        "TRGtNGCRActuals-SAPBW-Silver-GTN",
+        "TRGtNNonSAPGCRActuals-SAPBW-Silver-GTN",
+        "TRGtNVolume-SAPBW-Silver-GTN"
+    ],
+    "dependencyOutbound": [],
+    "R0_common_conf": {
+        "use-case": "GDF",
+        "prcs-name": "pbi-refresh-process"
+    },
+    "R1_data_refresh_process": {
+        "type": "PBI_semantic_model_refresh",
+        "semantic_model_name": "GTN Semantic Model",
+        "workspace_environment_id": {
+            "dev": "61a5b5ca-0345-4925-a545-2f9075f4df5f",
+            "qa": "8b3a6712-fa19-426b-9edb-b059457225a7",
+            "prod": "e20a0c70-9b16-4405-bb72-861cced55a8c"
+        },
+        "semantic_model_id": {
+            "dev": "3feb102f-4ca2-45fc-9073-53be532fffc7",
+            "qa": "646369de-c317-47d1-b231-a85f072bc8e9",
+            "prod": "01e6b317-a0ed-4a58-94e2-e49df5a33934"
+        },
+        "notify_option": "NoNotification",
+        "refresh_type": "full",
+        "commit_mode": "transactional",
+        "apply_refresh_policy": "true",
+        "effective_date": "",
+        "objects_to_update": []
+    }
+}

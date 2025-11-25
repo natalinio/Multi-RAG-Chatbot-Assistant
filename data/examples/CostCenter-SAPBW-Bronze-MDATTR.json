@@ -1,0 +1,49 @@
+{
+    "domain": "SAPBW",
+    "entity": "CostCenter-SAPBW-Bronze-MDATTR",
+    "layer": "Bronze",
+    "process_requested": "ingestion",
+    "market": "MDATTR",
+    "partition": [
+        "MDATTR"
+    ],
+    "dependencyInbound": [],
+    "dependencyOutBound": [],
+    "I0_common_conf": {
+        "use-case": "GDF",
+        "prcs-name": "bronze-process",
+        "table_name": "ZGDFMD008$F"
+    },
+    "I1_data_extract_process": {
+        "type": "data_read_process",
+        "source": {
+            "type": "SAPCDC",
+            "file-format": "ODP",
+            "path": "ZGDFMD008$F",
+            "recursive": "",
+            "extraction_type": "fullLoad",
+            "update_datetime_column": "",
+            "update_datetime_format": "",
+            "filter_condition": "",
+            "custom_query": "",
+            "checkPointKey": "CheckPointFor_ZGDFMD008$F",
+            "sapContext": "BW",
+            "sapKeyColumns": [],
+            "sapPartitions": []
+        }
+    },
+    "I2_data_ingestion": {
+        "type": "data_ingestion_process",
+        "sink": {
+            "type": "ADLS",
+            "storage-account": "dlsgdadev",
+            "file-format": "parquet",
+            "container": "bronze",
+            "path": "ingested/sapbw/masterdata/ZGDFMD008$F/",
+            "separator": "",
+            "recursive": "",
+            "sinkPartitions": "single-partition",
+            "stagingStorageFolder": "landing/sapbw/masterdata/ZGDFMD008$F/"
+        }
+    }
+}

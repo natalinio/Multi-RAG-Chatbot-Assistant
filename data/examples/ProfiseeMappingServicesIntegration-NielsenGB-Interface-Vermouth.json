@@ -1,0 +1,55 @@
+{
+    "domain": "NielsenGB",
+    "entity": "ProfiseeMappingServicesIntegration-NielsenGB-Interface-Vermouth",
+    "layer": "Interface",
+    "process_requested": "integration",
+    "market": "Vermouth",
+    "partition": [
+        "Vermouth"
+    ],
+    "dependencyInbound": [
+        "STG_ProfiseeMappingServicesInput-NielsenGB-Silver-Vermouth"
+    ],
+    "dependencyOutbound": [],
+    "IF0_common_conf": {
+        "use-case": "GDF",
+        "prcs-name": "integration",
+        "table_name": "ProfiseeMappingServicesInput"
+    },
+    "IF1_data_read_process": {
+        "type": "data_read_process",
+        "source": {
+            "type": "ADLS",
+            "file-format": "csv",
+            "container": "interface",
+            "path": "/profisee/ProductMapping/NielsenGB_Vermouth/ProfiseeMappingServicesInput/",
+            "separator": ",",
+            "recursive": "False",
+            "storage-account": "dlsgdadev",
+            "read_type": "full-load",
+            "update_datetime_format": ""
+        }
+    },
+    "IF2_data_integration_process": {
+        "type": "data_integration_process",
+        "sink": {
+            "type": "ProfiseeUpsert",
+            "path": "product"
+        }
+    },
+    "IF3_post_process": {
+        "type": "data_read_post_process",
+        "postprocessaction": "archive_delete",
+        "archive": {
+            "archivesink": {
+                "type": "ADLS",
+                "storage-account": "dlsgdadev",
+                "file-format": "csv",
+                "container": "interface",
+                "path": "/profisee/ProductMapping/NielsenGB_Vermouth/ProfiseeMappingServicesInput/archive/",
+                "separator": "",
+                "recursive": ""
+            }
+        }
+    }
+}

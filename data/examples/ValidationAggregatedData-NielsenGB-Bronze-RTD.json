@@ -1,0 +1,282 @@
+{
+    "domain": "NielsenGB",
+    "entity": "ValidationAggregatedData-NielsenGB-Bronze-RTD",
+    "layer": "Bronze",
+    "process_requested": "validation",
+    "market": "RTD",
+    "partition": [
+        "RTD"
+    ],
+    "dependencyInbound": [
+        "Validation-NielsenGB-Bronze-RTD"
+    ],
+    "dependencyOutbound": [],
+    "D0_common_conf": {
+        "use-case": "GDF",
+        "prcs-name": "validation-process",
+        "table_name": ""
+    },
+    "D1_data_extract_process": {
+        "type": "data_extract_process",
+        "sourceList": [
+            "source1"
+        ],
+        "source1": {
+            "type": "bronze-zone",
+            "storage_account_name": "dlsddnielsen",
+            "container": "dropdev",
+            "read-type": "delta-load",
+            "file-format": "parquet",
+            "delimiter": "",
+            "comment": "",
+            "path": "/GB/",
+            "fileName": "Bacardi_GB_RTD_aggregated_data",
+            "schema": "nielsen",
+            "volume": "gb"
+        }
+    },
+    "D3_data_validation_process": {
+        "type": "data_validation_process",
+        "path": "GB",
+        "error_path": "GB/error",
+        "container": "dropdev",
+        "storage_account_name": "dlsddnielsen",
+        "file-format": "parquet",
+        "validation-list": [
+            "V1"
+        ],
+        "V1": {
+            "type": "data_contract_validation",
+            "critical": "true",
+            "def": {
+                "expected-schema": {
+                    "AVG_E_PRC": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "NUM_STORES_SELLING_SMPL": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "BE": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "BU": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "BDOL": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "NUM_UPC_SELLING_SMPL": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "NUM_DIST": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "NUM_DIST_REACH": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "AP_NUM_DIST": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "AFD_NUM_DIST": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "AFWOD_NUM_DIST": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "AP_E_PRC": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "AVG_U_PRC": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "AP_U_PRC": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "E_ROS_REACH": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "E_ROS": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "U_ROS": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "U_ROS_REACH": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "DOL_ROS": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "E": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "AP_E": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "ODWOT_E": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "AFD_E": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "AFWOD_E": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "NP_E": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "TD_E": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "U": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "AP_U": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "ODWOT_U": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "AFD_U": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "NP_U": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "TD_U": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "DOL": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "AP_DOL": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "ODWOT_DOL": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "AFD_DOL": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "AFWOD_DOL": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "NP_DOL": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "TD_DOL": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "NUM_STORES_PROJ_ENABLED": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "DOL_CCV_NON_REACH_CONTEXT": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "DOL_CCV_REACH_CONTEXT": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "AP_DOL_SGV_NON_REACH_CONTEXT": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "AFD_DOL_SGV_NON_REACH_CONTEXT": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    },
+                    "AFWOD_DOL_SGV_NON_REACH_CONTEXT": {
+                        "isPrimary": "false",
+                        "isNullable": "true",
+                        "dataType": "double"
+                    }
+                }
+            }
+        }
+    }
+}

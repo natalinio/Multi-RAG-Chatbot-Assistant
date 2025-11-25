@@ -1,0 +1,32 @@
+{
+  "domain": "SFAmalia",
+  "entity": "AccountReport-SFAmalia-Bronze-GLB",
+  "layer": "Bronze",
+  "process_requested": "ingestion",
+  "market": "GLB",
+  "partition": ["GLB"],
+  "I0_common_conf": {
+    "use-case": "GDF",
+    "prcs-name": "bronze-process",
+    "table_name": "account_report"
+  },
+  "I1_data_extract_process": {
+    "type": "data_read_process",
+    "source": {
+      "type": "SF",
+      "query_type": "reportId",
+      "source_object": "00O5g000005pQvE",  
+      "info": "Extraction from Salesforce report by reportId"
+    }
+  },
+  "I2_data_ingestion": {
+    "type": "data_ingestion_process",
+    "sink": {
+      "type": "ADLS",
+      "storage_account": "dlsgdadev",
+      "file_format": "json",
+      "container": "bronze",
+      "path": "ingested/sf/report/account_report/"
+    }
+  }
+}

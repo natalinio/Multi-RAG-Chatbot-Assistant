@@ -1,0 +1,47 @@
+{
+    "domain": "SFAsseco",
+    "entity": "CommunicationAdministrativeActivity-SFAsseco-Bronze-GLB",
+    "layer": "Bronze",
+    "process_requested": "ingestion",
+    "market": "GLB",
+    "partition": [
+        "GLB"
+    ],
+	"dependencyInbound": [],
+    "dependencyOutbound": [],
+    "I0_common_conf": {
+        "use-case": "GDF",
+        "prcs-name": "bronze-process",
+        "table_name": "Asseco_Communication_AdministrativeActivity"
+    },
+    "I1_data_extract_process": {
+        "type": "data_read_process",
+        "source": {
+            "type": "ASQL",
+            "name": "SFAsseco",
+            "connection_type": "userName",
+            "path": "dbo.Asseco_Communication_AdministrativeActivity",
+            "extraction_type": "delta",
+			"degree_parallelism": 4,
+            "update_datetime_column": "LoadDateID",
+            "update_datetime_format": "%Y-%m-%dT%H:%M:%S",
+            "filter_condition": "",
+            "custom_query": "",
+            "partition_option": "DynamicRange",
+            "dynamic_partition_column": "MarketId",
+			"partition_upper_bound": 3,
+			"partition_lower_bound": 1,
+            "info": "Incremental extraction from Azure SQL based on LastModifiedDate watermark"
+        }
+    },
+    "I2_data_ingestion": {
+        "type": "data_ingestion_process",
+        "sink": {
+            "type": "ADLS",
+            "storage_account": "dlsgdadev",
+            "container": "bronze",
+            "file-format": "parquet",
+            "path": "ingested/asql/asseco/CommunicationAdministrativeActivity"
+        }
+    }
+}

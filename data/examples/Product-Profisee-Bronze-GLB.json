@@ -1,0 +1,40 @@
+{
+    "domain": "Profisee",
+    "entity": "Product-Profisee-Bronze-GLB",
+    "layer": "Bronze",
+    "process_requested": "ingestion",
+    "market": "GLB",
+    "partition": [
+        "GLB"
+    ],
+    "dependencyInbound": [],
+    "dependencyOutBound": [],
+    "I0_common_conf": {
+        "use-case": "GDF",
+        "prcs-name": "bronze-process",
+        "table_name": "Product"
+    },
+    "I1_data_extract_process": {
+        "type": "data_read_process",
+        "source": {
+            "type": "Profisee",
+            "path": "Product",
+            "extraction_type": "Full",
+            "custom_query": "",
+            "filter_condition": "",
+            "update_datetime_column": "lastChgDTM",
+            "update_datetime_format": "",
+            "comment": "path = a Profisee entity, custom_query = a comma separated list of entity attribute names to return, filter_condition = a filter to restrict the records returned; documentation url: https://github.com/Profisee/azuredatafactory/blob/main/documentation/"
+        }
+    },
+    "I2_data_ingestion": {
+        "type": "data_ingestion_process",
+        "sink": {
+            "type": "ADLS",
+            "storage-account": "dlsgdadev",
+            "file-format": "json",
+            "container": "bronze",
+            "path": "ingested/profisee/Product/"
+        }
+    }
+}

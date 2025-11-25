@@ -1,0 +1,18 @@
+# Minimal production requirements for Azure deployment
+# Framework
+fastapi==0.121.0
+uvicorn[standard]==0.34.0
+gunicorn==23.0.0
+python-dotenv==1.0.1
+
+# Azure SDKs
+azure-cosmos==4.9.0
+azure-search-documents==11.6.0
+azure-identity==1.19.0
+
+# Semantic Kernel with OpenAI connector (includes openai>=1.109)
+semantic-kernel[openai]==1.38.0
+
+# Data validation
+pydantic==2.9.2
+pydantic-settings==2.6.1

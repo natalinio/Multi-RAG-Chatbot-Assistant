@@ -1,0 +1,22 @@
+{
+    "domain": "SFAmalia",
+    "description": "Environment configuration for SFAmalia Salesforce",
+    "azure": {
+        "storage_account": null 
+    },
+    
+    "markets": [
+        {
+            "market": "GLB",
+            "source": {
+                "name": "SFAmalia",
+                "connection": {
+                    "environmentURL": "https://bacardi--qsf.sandbox.my.salesforce.com",
+                    "clientId": "3MVG9VwL6uEwP_uRUak_UIxPGNvWFlHqZ5xD4uVH0Q0cWwXQaUGdJM.QxA3MowzGjpn9NXCQOHycJZkCnsTzb",
+                    "secret": "SF-CLIENT-ID",
+                    "apiVersion": "54.0"
+                }
+            }
+        }
+    ]
+}

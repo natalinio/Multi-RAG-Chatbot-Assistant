@@ -1,0 +1,19 @@
+{
+    "domain": "SFAsseco",
+    "description": "Environment configuration SFA Asseco - Azure SQL (v2)",
+    "markets": [
+        {
+            "market": "GLB",
+            "source": {
+                "name": "SFAsseco",
+                "connection": {
+                    "server": "sfa-sql-mi.public.03ec2339517b.database.windows.net,3342",
+                    "database": "SFA_BI",
+                    "user": "avanade",
+                    "secret": "ASQL-SFA-CLIENT-SECRET",
+                    "trust_certificate": true
+                }
+            }
+        }
+    ]
+}

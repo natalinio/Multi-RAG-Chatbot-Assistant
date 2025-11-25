@@ -1,0 +1,99 @@
+{
+    "domain": "SAPBW",
+    "entity": "MDBottleSize-SAPBW-Silver-MDTXT",
+    "layer": "Silver",
+    "process_requested": "transformation",
+    "market": "MDTXT",
+    "partition": [
+        "MDTXT"
+    ],
+    "dependencyInbound": [
+        "BottleSizeText-SAPBW-Bronze-MDTXT"
+    ],
+    "dependencyOutbound": [],
+    "D0_common_conf": {
+        "use-case": "GDF",
+        "prcs-name": "silver-process",
+        "table_name": "MD_BottleSize"
+    },
+    "D1_data_extract_process": {
+        "type": "data_extract_process",
+        "sourceList": [
+            "source1"
+        ],
+        "source1": {
+            "type": "bronze-zone",
+            "storage_account_name": "dlsgdadev",
+            "container": "bronze",
+            "read-type": "full-load",
+            "file-format": "parquet",
+            "path": "/sapbw/masterdata/ZMATHIER4$T/",
+            "fileName": "ZMATHIER4$T",
+            "volume": "zmathier4t"
+        }
+    },
+    "D2_data_transform_process": {
+        "type": "data_transform_process",
+        "transform-list": [
+            "T1",
+            "T2"
+        ],
+        "T1": {
+            "type": "bulk-hash",
+            "def": {
+                "colnames": [
+                    {
+                        "sk_name": "_Bottle_Size_uid_hash",
+                        "sk_name_int": "SK_Bottle_Size_uid",
+                        "transform_key": [
+                            "/BIC/ZMATHIER4"
+                        ]
+                    }
+                ]
+            }
+        },
+        "T2": {
+            "type": "custom-sql-query",
+            "def": {
+                "final-query": "select *, CURRENT_TIMESTAMP() as insert_date, CURRENT_TIMESTAMP() as last_update from interm_df"
+            }
+        }
+    },
+    "D3_load_data_process": {
+        "type": "load_data_process",
+        "mode-of-write": "overwrite",
+        "overwrite-schema": "true",
+        "container": "silver",
+        "target-path": "md_scm.BottleSize",
+        "target-format": "delta",
+        "target-table": "BottleSize",
+        "target-collection": "Global-SAPBW-GLB-DataProduct-Silver",
+        "loadType": "full",
+        "target-schema": {
+            "SK_Bottle_Size_uid": {
+                "colName": "_Bottle_Size_uid",
+                "type": "long"
+            },
+            "/BIC/ZMATHIER4": {
+                "colName": "Bottle_Size_code",
+                "type": "string"
+            },
+            "LANGU": {
+                "colName": "Language_Key_code",
+                "type": "string"
+            },
+            "TXTMD": {
+                "colName": "Medium_Description_desc",
+                "type": "string"
+            },
+            "insert_date": {
+                "colName": "_Creation_Date_tst",
+                "type": "timestamp"
+            },
+            "last_update": {
+                "colName": "_Update_Date_tst",
+                "type": "timestamp"
+            }
+        }
+    }
+}

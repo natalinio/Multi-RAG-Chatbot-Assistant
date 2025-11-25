@@ -1,0 +1,37 @@
+{
+  "domain": "SFAmalia",
+  "entity": "Account-SFAmalia-Bronze-GLB",
+  "layer": "Bronze",
+  "process_requested": "ingestion",
+  "market": "GLB",
+  "partition": ["GLB"],
+  "I0_common_conf": {
+    "use-case": "GDF",
+    "prcs-name": "bronze-process",
+    "table_name": "account"
+  },
+  "I1_data_extract_process": {
+    "type": "data_read_process",
+    "source": {
+      "type": "SF",
+      "query_type": "objectApi",
+      "source_object": "account",
+      "soql_selected_fields": "Id,IsDeleted,MasterRecordId,Name,RecordTypeId,ParentId,ShippingCity,LastModifiedDate",
+      "soql_extraction_type": "incremental-window",
+      "soql_source_update_datetime_column": "LastModifiedDate",
+      "soql_incrementalwindow_function_param": ["LAST_N_DAYS", "7"],
+      "soql_additional_filter_condition": "",
+      "info": "Incremental load of last 7 days using Salesforce windowing function LAST_N_DAYS"
+    }
+  },
+  "I2_data_ingestion": {
+    "type": "data_ingestion_process",
+    "sink": {
+      "type": "ADLS",
+      "storage_account": "dlsgdadev",
+      "file_format": "parquet",
+      "container": "bronze",
+      "path": "ingested/sf/account/"
+    }
+  }
+}

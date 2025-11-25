@@ -1,0 +1,467 @@
+{
+    "domain": "NielsenGB",
+    "entity": "STG_AggregatedData-NielsenGB-Silver-RTD",
+    "layer": "Staging",
+    "process_requested": "transformation",
+    "market": "RTD",
+    "partition": [
+        "RTD"
+    ],
+    "dependencyInbound": [
+        "AggregatedData-NielsenGB-Bronze-RTD",
+        "STG_MarketDim-NielsenGB-Silver-RTD",
+        "STG_PeriodDim-NielsenGB-Silver-RTD",
+        "STG_ProductDim-NielsenGB-Silver-RTD"
+    ],
+    "dependencyOutbound": [],
+    "D0_common_conf": {
+        "use-case": "GDF",
+        "prcs-name": "staging-process",
+        "table_name": "STG_AggregatedData_RTD"
+    },
+    "D1_data_extract_process": {
+        "type": "data_extract_process",
+        "sourceList": [
+            "source1",
+            "source2",
+            "source3",
+            "source4"
+        ],
+        "source1": {
+            "type": "bronze-zone",
+            "storage_account_name": "dlsgdadev",
+            "container": "bronze",
+            "read-type": "delta-load",
+            "file-format": "parquet",
+            "delimiter": "",
+            "path": "/nielsen/GB/RTD/",
+            "fileName": "Bacardi_GB_RTD_aggregated_data",
+            "derived-key-process": {
+                "T1": {
+                    "process": "new-default",
+                    "default-value": "RTD",
+                    "colName": "Category_DB_name"
+                }
+            },
+            "cols-alias-lookup": {
+                "lookup_config_path": "config/nielsen/GB/CG_Indicators/",
+                "lookup_config_filter": "cat_db='RTD' and to_be_included='Y'",
+                "mandatory_columns": [
+                    "market_id",
+                    "product_id",
+                    "period_id",
+                    "Category_DB_name",
+                    "input_file"
+                ],
+                "volume": "cg_indicators"
+            },
+            "volume": "rtd"
+        },
+        "source2": {
+            "type": "staging-zone",
+            "storage_account_name": "dlsgdadev",
+            "container": "staging",
+            "read-type": "delta-load",
+            "file-format": "parquet",
+            "delimiter": "",
+            "path": "/staging/global/transactional/marketing/marketing/marketshare/nielsenGB/RTD/STG_MarketDim_RTD/",
+            "fileName": "part-",
+            "cols": [
+                "Market_nk",
+                "_Market_Desc_uid"
+            ],
+            "combine": {
+                "type": "join",
+                "base-table-key": [
+                    "market_id"
+                ],
+                "source-table-key": [
+                    "Market_nk"
+                ],
+                "join-type": "left"
+            },
+            "volume": "stg_marketdim_rtd"
+        },
+        "source3": {
+            "type": "staging-zone",
+            "storage_account_name": "dlsgdadev",
+            "container": "staging",
+            "read-type": "delta-load",
+            "file-format": "parquet",
+            "delimiter": "",
+            "path": "/staging/global/transactional/marketing/marketing/marketshare/nielsenGB/RTD/STG_PeriodDim_RTD/",
+            "fileName": "part-",
+            "cols": [
+                "Period_nk",
+                "_Period_uid",
+                "Period_Start_date",
+                "Period_End_date",
+                "NIQ_Periodicity_desc"
+            ],
+            "combine": {
+                "type": "join",
+                "base-table-key": [
+                    "period_id"
+                ],
+                "source-table-key": [
+                    "Period_nk"
+                ],
+                "join-type": "left"
+            },
+            "volume": "stg_perioddim_rtd"
+        },
+        "source4": {
+            "type": "staging-zone",
+            "storage_account_name": "dlsgdadev",
+            "container": "staging",
+            "read-type": "delta-load",
+            "file-format": "parquet",
+            "delimiter": "",
+            "path": "/staging/global/transactional/marketing/marketing/marketshare/nielsenGB/RTD/STG_ProductDim_RTD/",
+            "fileName": "part-",
+            "cols": [
+                "Product_nk",
+                "_Product_uid",
+                "Hierarchy_num",
+                "Hierarchy_Level_num",
+                "Hierarchy_Level_name"
+            ],
+            "combine": {
+                "type": "join",
+                "base-table-key": [
+                    "product_id"
+                ],
+                "source-table-key": [
+                    "Product_nk"
+                ],
+                "join-type": "inner"
+            },
+            "volume": "stg_productdim_rtd"
+        }
+    },
+    "D2_data_transform_process": {
+        "type": "data_transform_process",
+        "transform-list": [
+            "T1"
+        ],
+        "T1": {
+            "type": "custom-sql-query",
+            "def": {
+                "interim-query": "select _Market_Desc_uid, market_id, _Product_uid, product_id, _Period_uid, Period_Start_date, Period_End_date, Category_DB_name, Average_Price_Per_Sales_Liter_loccur, 0 as Average_Items_Per_Store_num, Average_Store_num, Baseline_Sales_liter, Baseline_Sales_qty, Baseline_Sales_loccur, 0 as Numeric_Distribution_Total_TPR_num, 0 as Weighted_Distribution_Total_TPR_num, Number_of_Items_num, Numeric_Distribution_num, Numeric_Distribution_Reach_num, Numeric_Distribution_Any_Promo_num, 0 as Numeric_Distribution_Disp_wo_Feat_num, Numeric_Distribution_Feat_and_Disp_num, Numeric_Distribution_Feat_wo_Disp_num, Price_Any_Promo_Per_Liter_loccur, Average_Price_Per_Sales_Unit_loccur, Price_Any_Promo_Per_Unit_loccur, ROS_Reach_liter, ROS_liter, ROS_qty, ROS_Reach_qty, ROS_loccur, Sales_liter, Sales_Any_Promo_liter, 0 as Sales_Disp_wo_Feat_liter, Sales_Disp_wo_Feat_alt_liter, Sales_Feat_and_Disp_liter, Sales_Feat_wo_Disp_liter, 0 as Sales_Feat_wo_Disp_alt_liter, Sales_No_Promo_liter, Sales_Total_Disp_liter, 0 as Sales_Total_TPR_liter, Sales_qty, Sales_Any_Promo_qty, Sales_Disp_wo_Feat_qty, Sales_Feat_and_Disp_qty, Sales_No_Promo_qty, Sales_Total_Disp_qty, 0 as Sales_Total_TPR_qty, Sales_loccur, Sales_Any_Promo_loccur, 0 as Sales_Disp_wo_Feat_loccur, Sales_Disp_wo_Feat_alt_loccur, Sales_Feat_and_Disp_loccur, Sales_Feat_wo_Disp_loccur, 0 as Sales_Feat_wo_Disp_alt_loccur, 0 as Sales_Feat_wo_Disp_qty, Sales_No_Promo_loccur, Sales_Total_Disp_loccur, 0 as Sales_Total_TPR_loccur, Universe_Number_of_Stores_num, Weighted_Distribution_num, Weighted_Distribution_Reach_num, Weighted_Distribution_Any_Promo_num, 0 as Weighted_Distribution_Disp_wo_Feat_num, Weighted_Distribution_Feat_and_Disp_num, Weighted_Distribution_Feat_wo_Disp_num, 'GBP' as Local_Currency_code, Hierarchy_num, Hierarchy_Level_num, Hierarchy_Level_name, case when NIQ_Periodicity_desc = 'Weeks' then 7 else null end as elapsed_period, input_file, CURRENT_TIMESTAMP() as load_date, CURRENT_TIMESTAMP() as last_update from hash_df",
+                "final-query": "select * from interm_df"
+            }
+        }
+    },
+    "D3_load_data_process": {
+        "type": "load_data_process",
+        "mode-of-write": "overwrite",
+        "overwrite-schema": "true",
+        "merge-schema": "true",
+        "container": "staging",
+        "target-path": "staging/global/transactional/marketing/marketing/marketshare/nielsenGB/RTD/STG_AggregatedData_RTD/",
+        "target-format": "parquet",
+        "target-table": "STG_AggregatedData_RTD",
+        "time-table-suffix": "timestamp",
+        "target-collection": "Global-Nielsen-GB-MarketShare-Silver",
+        "loadType": "full",
+        "target-schema": {
+            "_Market_Desc_uid": {
+                "colName": "_Market_Desc_uid",
+                "type": "bigint"
+            },
+            "market_id": {
+                "colName": "Market_nk",
+                "type": "bigint"
+            },
+            "_Product_uid": {
+                "colName": "_Product_uid",
+                "type": "bigint"
+            },
+            "_Period_uid": {
+                "colName": "_Period_uid",
+                "type": "bigint"
+            },
+            "product_id": {
+                "colName": "Product_nk",
+                "type": "string"
+            },
+            "Period_Start_date": {
+                "colName": "Period_Start_date",
+                "type": "date"
+            },
+            "Period_End_date": {
+                "colName": "Period_End_date",
+                "type": "date"
+            },
+            "elapsed_period": {
+                "colName": "Period_Elapsed_Days_num",
+                "type": "integer"
+            },
+            "Average_Price_Per_Sales_Liter_loccur": {
+                "colName": "Average_Price_Per_Sales_Liter_loccur",
+                "type": "float"
+            },
+            "Average_Items_Per_Store_num": {
+                "colName": "Average_Items_Per_Store_num",
+                "type": "float"
+            },
+            "Average_Store_num": {
+                "colName": "Average_Store_num",
+                "type": "float"
+            },
+            "Baseline_Sales_liter": {
+                "colName": "Baseline_Sales_liter",
+                "type": "float"
+            },
+            "Baseline_Sales_qty": {
+                "colName": "Baseline_Sales_qty",
+                "type": "float"
+            },
+            "Baseline_Sales_loccur": {
+                "colName": "Baseline_Sales_loccur",
+                "type": "float"
+            },
+            "Numeric_Distribution_Total_TPR_num": {
+                "colName": "Numeric_Distribution_Total_TPR_num",
+                "type": "float"
+            },
+            "Weighted_Distribution_Total_TPR_num": {
+                "colName": "Weighted_Distribution_Total_TPR_num",
+                "type": "float"
+            },
+            "Number_of_Items_num": {
+                "colName": "Number_of_Items_num",
+                "type": "float"
+            },
+            "Numeric_Distribution_num": {
+                "colName": "Numeric_Distribution_num",
+                "type": "float"
+            },
+            "Numeric_Distribution_Reach_num": {
+                "colName": "Numeric_Distribution_Reach_num",
+                "type": "float"
+            },
+            "Numeric_Distribution_Any_Promo_num": {
+                "colName": "Numeric_Distribution_Any_Promo_num",
+                "type": "float"
+            },
+            "Numeric_Distribution_Disp_wo_Feat_num": {
+                "colName": "Numeric_Distribution_Disp_wo_Feat_num",
+                "type": "float"
+            },
+            "Numeric_Distribution_Feat_and_Disp_num": {
+                "colName": "Numeric_Distribution_Feat_and_Disp_num",
+                "type": "float"
+            },
+            "Numeric_Distribution_Feat_wo_Disp_num": {
+                "colName": "Numeric_Distribution_Feat_wo_Disp_num",
+                "type": "float"
+            },
+            "Price_Any_Promo_Per_Liter_loccur": {
+                "colName": "Price_Any_Promo_Per_Liter_loccur",
+                "type": "float"
+            },
+            "Average_Price_Per_Sales_Unit_loccur": {
+                "colName": "Average_Price_Per_Sales_Unit_loccur",
+                "type": "float"
+            },
+            "Price_Any_Promo_Per_Unit_loccur": {
+                "colName": "Price_Any_Promo_Per_Unit_loccur",
+                "type": "float"
+            },
+            "ROS_Reach_liter": {
+                "colName": "ROS_Reach_liter",
+                "type": "float"
+            },
+            "ROS_liter": {
+                "colName": "ROS_liter",
+                "type": "float"
+            },
+            "ROS_qty": {
+                "colName": "ROS_qty",
+                "type": "float"
+            },
+            "ROS_Reach_qty": {
+                "colName": "ROS_Reach_qty",
+                "type": "float"
+            },
+            "ROS_loccur": {
+                "colName": "ROS_loccur",
+                "type": "float"
+            },
+            "Sales_liter": {
+                "colName": "Sales_liter",
+                "type": "float"
+            },
+            "Sales_Any_Promo_liter": {
+                "colName": "Sales_Any_Promo_liter",
+                "type": "float"
+            },
+            "Sales_Disp_wo_Feat_liter": {
+                "colName": "Sales_Disp_wo_Feat_liter",
+                "type": "float"
+            },
+            "Sales_Disp_wo_Feat_alt_liter": {
+                "colName": "Sales_Disp_wo_Feat_alt_liter",
+                "type": "float"
+            },
+            "Sales_Feat_and_Disp_liter": {
+                "colName": "Sales_Feat_and_Disp_liter",
+                "type": "float"
+            },
+            "Sales_Feat_wo_Disp_liter": {
+                "colName": "Sales_Feat_wo_Disp_liter",
+                "type": "float"
+            },
+            "Sales_Feat_wo_Disp_alt_liter": {
+                "colName": "Sales_Feat_wo_Disp_alt_liter",
+                "type": "float"
+            },
+            "Sales_No_Promo_liter": {
+                "colName": "Sales_No_Promo_liter",
+                "type": "float"
+            },
+            "Sales_Total_Disp_liter": {
+                "colName": "Sales_Total_Disp_liter",
+                "type": "float"
+            },
+            "Sales_Total_TPR_liter": {
+                "colName": "Sales_Total_TPR_liter",
+                "type": "float"
+            },
+            "Sales_qty": {
+                "colName": "Sales_qty",
+                "type": "float"
+            },
+            "Sales_Any_Promo_qty": {
+                "colName": "Sales_Any_Promo_qty",
+                "type": "float"
+            },
+            "Sales_Disp_wo_Feat_qty": {
+                "colName": "Sales_Disp_wo_Feat_qty",
+                "type": "float"
+            },
+            "Sales_Feat_and_Disp_qty": {
+                "colName": "Sales_Feat_and_Disp_qty",
+                "type": "float"
+            },
+            "Sales_No_Promo_qty": {
+                "colName": "Sales_No_Promo_qty",
+                "type": "float"
+            },
+            "Sales_Total_Disp_qty": {
+                "colName": "Sales_Total_Disp_qty",
+                "type": "float"
+            },
+            "Sales_Total_TPR_qty": {
+                "colName": "Sales_Total_TPR_qty",
+                "type": "float"
+            },
+            "Sales_loccur": {
+                "colName": "Sales_loccur",
+                "type": "float"
+            },
+            "Sales_Any_Promo_loccur": {
+                "colName": "Sales_Any_Promo_loccur",
+                "type": "float"
+            },
+            "Sales_Disp_wo_Feat_loccur": {
+                "colName": "Sales_Disp_wo_Feat_loccur",
+                "type": "float"
+            },
+            "Sales_Disp_wo_Feat_alt_loccur": {
+                "colName": "Sales_Disp_wo_Feat_alt_loccur",
+                "type": "float"
+            },
+            "Sales_Feat_and_Disp_loccur": {
+                "colName": "Sales_Feat_and_Disp_loccur",
+                "type": "float"
+            },
+            "Sales_Feat_wo_Disp_loccur": {
+                "colName": "Sales_Feat_wo_Disp_loccur",
+                "type": "float"
+            },
+            "Sales_Feat_wo_Disp_alt_loccur": {
+                "colName": "Sales_Feat_wo_Disp_alt_loccur",
+                "type": "float"
+            },
+            "Sales_Feat_wo_Disp_qty": {
+                "colName": "Sales_Feat_wo_Disp_qty",
+                "type": "float"
+            },
+            "Sales_No_Promo_loccur": {
+                "colName": "Sales_No_Promo_loccur",
+                "type": "float"
+            },
+            "Sales_Total_Disp_loccur": {
+                "colName": "Sales_Total_Disp_loccur",
+                "type": "float"
+            },
+            "Sales_Total_TPR_loccur": {
+                "colName": "Sales_Total_TPR_loccur",
+                "type": "float"
+            },
+            "Universe_Number_of_Stores_num": {
+                "colName": "Universe_Number_of_Stores_num",
+                "type": "float"
+            },
+            "Weighted_Distribution_num": {
+                "colName": "Weighted_Distribution_num",
+                "type": "float"
+            },
+            "Weighted_Distribution_Reach_num": {
+                "colName": "Weighted_Distribution_Reach_num",
+                "type": "float"
+            },
+            "Weighted_Distribution_Any_Promo_num": {
+                "colName": "Weighted_Distribution_Any_Promo_num",
+                "type": "float"
+            },
+            "Weighted_Distribution_Disp_wo_Feat_num": {
+                "colName": "Weighted_Distribution_Disp_wo_Feat_num",
+                "type": "float"
+            },
+            "Weighted_Distribution_Feat_and_Disp_num": {
+                "colName": "Weighted_Distribution_Feat_and_Disp_num",
+                "type": "float"
+            },
+            "Weighted_Distribution_Feat_wo_Disp_num": {
+                "colName": "Weighted_Distribution_Feat_wo_Disp_num",
+                "type": "float"
+            },
+            "Local_Currency_code": {
+                "colName": "Local_Currency_code",
+                "type": "string"
+            },
+            "Hierarchy_num": {
+                "colName": "Prod_Hierarchy_num",
+                "type": "string"
+            },
+            "Hierarchy_Level_num": {
+                "colName": "Prod_Hierarchy_Level_num",
+                "type": "string"
+            },
+            "Hierarchy_Level_name": {
+                "colName": "Prod_Hierarchy_Level_name",
+                "type": "string"
+            },
+            "Category_DB_name": {
+                "colName": "Category_DB_name",
+                "type": "string"
+            },
+            "load_date": {
+                "colName": "_Creation_Date_tst",
+                "type": "timestamp"
+            },
+            "last_update": {
+                "colName": "_Update_Date_tst",
+                "type": "timestamp"
+            },
+            "input_file": {
+                "colName": "Input_File",
+                "type": "string"
+            }
+        },
+        "volume": "stg_aggregateddata_rtd"
+    }
+}

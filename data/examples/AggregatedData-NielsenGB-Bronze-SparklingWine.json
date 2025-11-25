@@ -1,0 +1,65 @@
+{
+    "domain": "NielsenGB",
+    "id": "75be30d65af3586705adeab6be1d30d5",
+    "entity": "AggregatedData-NielsenGB-Bronze-SparklingWine",
+    "layer": "Bronze",
+    "process_requested": "ingestion",
+    "market": "SparklingWine",
+    "partition": [
+        "SparklingWine"
+    ],
+    "dependencyInbound": [
+        "ValidationAggregatedData-NielsenGB-Bronze-SparklingWine",
+        "ValidationProductDim-NielsenGB-Bronze-SparklingWine",
+        "ValidationMarketDim-NielsenGB-Bronze-SparklingWine",
+        "ValidationPeriodDim-NielsenGB-Bronze-SparklingWine"
+    ],
+    "dependencyOutBound": [],
+    "I0_common_conf": {
+        "use-case": "GDF",
+        "prcs-name": "bronze-process",
+        "table_name": "Bacardi_GB_SparklingWine_aggregated_data"
+    },
+    "I1_data_extract_process": {
+        "type": "data_read_process",
+        "source": {
+            "type": "ADLS",
+            "file-format": "parquet",
+            "container": "dropdev",
+            "path": "GB",
+            "separator": "",
+            "recursive": "",
+            "storage-account": "dlsddnielsen",
+            "extraction_type": "Delta",
+            "update_datetime_format": ""
+        }
+    },
+    "I2_data_ingestion": {
+        "type": "data_ingestion_process",
+        "sink": {
+            "type": "ADLS",
+            "storage-account": "dlsgdadev",
+            "file-format": "parquet",
+            "container": "bronze",
+            "path": "ingested/nielsen/GB/SparklingWine/",
+            "keep_source_name": "0",
+            "separator": "",
+            "recursive": ""
+        }
+    },
+    "I3_post_process": {
+        "type": "data_ingestion_post_process",
+        "postprocessaction": "archive_delete",
+        "archive": {
+            "archivesink": {
+                "type": "ADLS",
+                "storage-account": "dlsddnielsen",
+                "file-format": "parquet",
+                "container": "dropdev",
+                "path": "GB/archive/",
+                "separator": "",
+                "recursive": ""
+            }
+        }
+    }
+}
