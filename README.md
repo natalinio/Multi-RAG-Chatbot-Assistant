@@ -2036,11 +2036,23 @@ logger.addHandler(
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+**This repository is public and protected.** The `main` branch cannot be modified directly. All contributions must be made through the fork and pull request workflow.
+
+### Quick Start for Contributors
+
+1. **Fork** the repository to your GitHub account
+2. **Clone** your fork locally
+3. Create a **feature branch** (`git checkout -b feature/AmazingFeature`)
+4. **Commit** your changes (`git commit -m 'feat: add some amazing feature'`)
+5. **Push** to your fork (`git push origin feature/AmazingFeature`)
+6. Open a **Pull Request** from your fork to this repository
+
+### Important Notes
+
+- ✅ **Fork and PR workflow required** - Direct pushes to `main` are not allowed
+- ✅ **Branch protection active** - Ensures code quality and proper review
+- ✅ **All contributions welcome** - Through the proper workflow
+- 📖 **See [CONTRIBUTING.md](CONTRIBUTING.md)** for complete guidelines
 
 ### Contribution Guidelines
 
@@ -2048,6 +2060,9 @@ logger.addHandler(
 - Add tests for new features
 - Update documentation
 - Ensure all tests pass
+- Use conventional commit messages (feat:, fix:, docs:, etc.)
+
+For detailed contribution guidelines, workflow, and best practices, please read **[CONTRIBUTING.md](CONTRIBUTING.md)**.
 
 ## 📄 License
 
