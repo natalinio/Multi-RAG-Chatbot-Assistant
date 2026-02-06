@@ -161,7 +161,7 @@ Validate input **before** executing database/search operations to:
 
 **Known Domains** (34 total):
 ```python
-['NielsenUS', 'NielsenGB', 'SAPBW', 'Bacardi', 'Profisee', 
+['NielsenUS', 'NielsenGB', 'SAPBW', 'Profisee', 
  'SFAsseco', 'SFAmalia', 'NielsenAU', 'NielsenBR', 'NielsenCL', 
  'NielsenDE', 'NielsenES', 'NielsenFR', 'NielsenIN', 'NielsenIT', 
  'NielsenMX', 'NielsenPL', 'NielsenPT', 'NielsenZA', ...]
