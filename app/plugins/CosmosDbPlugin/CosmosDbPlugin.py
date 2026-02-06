@@ -53,7 +53,7 @@ class CosmosDbPlugin:
         - ❌ WRONG: SELECT * FROM configurations WHERE domain = 'SAPBW'
         
         **Common Filters:**
-        - c.domain: Domain identifier (NielsenUS, NielsenGB, SAPBW, Bacardi, Profisee, SFAsseco, SFAmalia)
+        - c.domain: Domain identifier (NielsenUS, NielsenGB, SAPBW, Profisee, SFAsseco, SFAmalia)
         - c.layer: Data layer (Bronze, Silver, Gold)
         - c.entity: Entity/job name (unique identifier for document)
         - c.process_requested: Process type (ingestion, transformation, validation, integration, load)
@@ -282,7 +282,7 @@ class CosmosDbPlugin:
         List configurations filtered by domain.
         
         Args:
-            domain (str): The domain to filter by (e.g., 'NielsenUS', 'Bacardi')
+            domain (str): The domain to filter by (e.g., 'NielsenUS', 'Profisee')
             limit (str): Maximum number of results to return (default: "20")
         
         Returns:
@@ -293,7 +293,7 @@ class CosmosDbPlugin:
             KNOWN_DOMAINS = [
                 'NielsenUS', 'NielsenGB', 'NielsenBR', 'NielsenAT', 'NielsenBE', 'NielsenDE', 
                 'NielsenES', 'NielsenFR', 'NielsenIT', 'NielsenMX', 'NielsenNL', 'NielsenPL', 
-                'NielsenPT', 'SAPBW', 'Bacardi', 'Profisee', 'SFAsseco', 'SFAmalia', 
+                'NielsenPT', 'SAPBW', 'Profisee', 'SFAsseco', 'SFAmalia', 
                 'ITOperations', 'IWSR', 'MasterData', 'NABCA', 'PBI', 'RGMPtC_DRE', 
                 'RGMPtC_FPC', 'RetailerAsda', 'RetailerAuchan', 'RetailerCarrefour', 
                 'RetailerDIA', 'RetailerECI', 'RetailerMorrisons', 'RetailerSainsbury', 
@@ -543,7 +543,7 @@ class CosmosDbPlugin:
             
             "common_fields": {
                 "id": "Unique document identifier (string)",
-                "domain": "Data domain identifier (e.g., NielsenUS, NielsenGB, SAPBW, Bacardi, Profisee, SFAsseco, SFAmalia)",
+                "domain": "Data domain identifier (e.g., NielsenUS, NielsenGB, SAPBW, Profisee, SFAsseco, SFAmalia)",
                 "entity": "Entity job name - uniquely identifies a single json document (string)",
                 "layer": "Data layer of the medallion architecture (Bronze, Silver, Gold)",
                 "process_requested": "Type of processing requested (ingestion, transformation, validation, integration, load)",
@@ -708,7 +708,7 @@ class CosmosDbPlugin:
             ],
             
             "field_value_examples": {
-                "domains": ["NielsenUS", "NielsenGB", "NielsenBR", "NielsenAT", "SAPBW", "Bacardi", "Profisee", "SFAsseco", "SFAmalia"],
+                "domains": ["NielsenUS", "NielsenGB", "NielsenBR", "NielsenAT", "SAPBW", "Profisee", "SFAsseco", "SFAmalia"],
                 "layers": ["Bronze", "Silver", "Gold"],
                 "process_requested": ["ingestion", "transformation", "validation", "integration", "load"],
                 "markets": ["US", "GB", "GLB", "MDATTR", "MDTXT", "BR", "AT"],

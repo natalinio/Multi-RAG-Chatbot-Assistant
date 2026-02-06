@@ -11,8 +11,8 @@
             "source": {
                 "name": "SFAmalia",
                 "connection": {
-                    "environmentURL": "https://bacardi--qsf.sandbox.my.salesforce.com",
-                    "clientId": "3MVG9VwL6uEwP_uRUak_UIxPGNvWFlHqZ5xD4uVH0Q0cWwXQaUGdJM.QxA3MowzGjpn9NXCQOHycJZkCnsTzb",
+                    "environmentURL": "https://example.sandbox.my.salesforce.com",
+                    "clientId": "EXAMPLE_CLIENT_ID_PLACEHOLDER",
                     "secret": "SF-CLIENT-ID",
                     "apiVersion": "54.0"
                 }

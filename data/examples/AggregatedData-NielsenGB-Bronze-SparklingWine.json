@@ -18,7 +18,7 @@
     "I0_common_conf": {
         "use-case": "GDF",
         "prcs-name": "bronze-process",
-        "table_name": "Bacardi_GB_SparklingWine_aggregated_data"
+        "table_name": "Client_GB_SparklingWine_aggregated_data"
     },
     "I1_data_extract_process": {
         "type": "data_read_process",

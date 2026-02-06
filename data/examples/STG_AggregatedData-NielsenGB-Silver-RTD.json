@@ -35,7 +35,7 @@
             "file-format": "parquet",
             "delimiter": "",
             "path": "/nielsen/GB/RTD/",
-            "fileName": "Bacardi_GB_RTD_aggregated_data",
+            "fileName": "Client_GB_RTD_aggregated_data",
             "derived-key-process": {
                 "T1": {
                     "process": "new-default",

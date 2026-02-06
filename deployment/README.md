@@ -1,5 +1,5 @@
 # Azure Deployment Directory
-# ALMA ETL Chatbot - Bacardi GDA Project
+# ALMA ETL Chatbot - GDA Project
 
 This directory contains the automated deployment script and documentation for deploying ALMA to Azure App Service.
 
