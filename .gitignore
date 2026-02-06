@@ -106,10 +106,10 @@ celerybeat.pid
 .venv
 env/
 venv/
+venv-minimal/
 ENV/
 env.bak/
 venv.bak/
-venv
 
 # Spyder project settings
 .spyderproject
@@ -184,3 +184,19 @@ yarn-error.log*
 # AI Search index files
 search_index/
 embeddings/
+
+# Internal documentation
+README-INTERNAL.md
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Azure credentials
+*.publishsettings
+*.azureauth
+
+# Deployment logs
+deploy-logs/
+deploy-logs-minimal/

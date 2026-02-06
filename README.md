@@ -57,8 +57,8 @@ The application follows a modular architecture based on Semantic Kernel plugins:
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/your-org/cpgai_chatbot.git
-cd cpgai_chatbot
+git clone https://github.com/natalinio/Multi-RAG-Chatbot-Assistant.git
+cd Multi-RAG-Chatbot-Assistant
 
 # 2. Create virtual environment
 python -m venv venv
@@ -160,6 +160,9 @@ pytest tests/test_rag_extended.py -v
 - **[Deployment Guide](deployment/DEPLOYMENT_GUIDE.md)** - Complete deployment instructions
 - **[Testing Guide](tests/README.md)** - Testing procedures
 - **[Contributing](CONTRIBUTING.md)** - Contribution guidelines
+- **[Security Notice](SECURITY_NOTICE.md)** - Repository sanitization and security information
+- **[Repository Protection](REPOSITORY_PROTECTION_IMPLEMENTATION.md)** - Branch protection setup
+- **[GitHub Settings Verification](GITHUB_SETTINGS_VERIFICATION.md)** - Settings checklist
 
 ---
 
@@ -172,6 +175,20 @@ Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for gu
 3. Commit changes (`git commit -m 'feat: add amazing feature'`)
 4. Push to fork (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
+
+---
+
+## 🔒 Security
+
+This repository has been sanitized for public use:
+- ✅ No actual credentials or API keys
+- ✅ No client-specific information
+- ✅ Example configurations with placeholder values
+- ✅ Comprehensive .gitignore for sensitive files
+
+See [SECURITY_NOTICE.md](SECURITY_NOTICE.md) for details on security measures and sanitization.
+
+**⚠️ Important**: Never commit real credentials. Always use environment variables and keep `.env` files local.
 
 ---
 
