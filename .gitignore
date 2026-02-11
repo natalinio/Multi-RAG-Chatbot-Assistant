@@ -195,6 +195,37 @@ embeddings/
 
 # Internal documentation
 README-INTERNAL.md
+NEXT_STEPS.md
+GITHUB_SETTINGS_VERIFICATION.md
+
+# Development/historical documentation (keep local)
+docs/RECENT_IMPROVEMENTS.md
+docs/TOKEN_MANAGEMENT_SOLUTION.md
+docs/TOKEN_MANAGEMENT_TESTING.md
+deployment/DEPLOYMENT_GUIDE.md
+
+# ⚠️ CLIENT-SPECIFIC TEST FILES - Keep local only
+# These tests contain references to client domains, systems, and configuration names
+tests/test_validations_high_priority.py
+tests/test_token_management.py
+tests/test_semantic_title_ranking.py
+tests/test_cosmos_comprehensive.py
+tests/test_kernel_functions.py
+tests/test_no_hallucination.py
+tests/test_reindexed_search.py
+tests/test_sink_retrieval.py
+tests/test_rag_extended.py
+tests/test_asql_integration.py
+tests/show_semantic_titles.py
+tests/test_count_*.py
+tests/check_*.py
+
+# Note: Generic test files ARE tracked for public repository:
+# - tests/test_azure_services.py (Azure connectivity patterns)
+# - tests/test_local_health.py (Health check examples)
+# - tests/test_imports.py (Import verification)
+# - tests/README.md (Testing documentation)
+# - tests/.env.example (Template for configuration)
 
 # Environment files
 .env
