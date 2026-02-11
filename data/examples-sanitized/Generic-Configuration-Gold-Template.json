@@ -1,0 +1,54 @@
+{
+    "domain": "DomainC",
+    "entity": "Dimension-DomainC-Gold-Analytics",
+    "layer": "Gold",
+    "process_requested": "load",
+    "market": "GLB",
+    "partition": [
+        "GLB"
+    ],
+    "dependencyInbound": [
+        "Aggregation-DomainC-Silver-GLB"
+    ],
+    "dependencyOutbound": [],
+    "I0_common_conf": {
+        "use-case": "analytics-layer",
+        "prcs-name": "gold-dimension-process",
+        "table_name": "dim_entity"
+    },
+    "T1_transformation_process": {
+        "type": "transformation",
+        "transformation_type": "dimension_build",
+        "scd_type": "Type2",
+        "business_key": [
+            "entity_code"
+        ],
+        "scd_columns": [
+            "entity_name",
+            "entity_category",
+            "entity_status"
+        ],
+        "metadata_columns": {
+            "valid_from": "effective_start_date",
+            "valid_to": "effective_end_date",
+            "is_current": "current_record_flag"
+        }
+    },
+    "D3_load_data_process": {
+        "type": "data_write_process",
+        "mode-of-write": "merge",
+        "target-path": "catalog.analytics.gold_dimension_table",
+        "merge_keys": [
+            "entity_code",
+            "is_current"
+        ],
+        "partition-by": []
+    },
+    "description": "Generic Gold layer dimension table with SCD Type 2 support",
+    "tags": [
+        "gold",
+        "dimension",
+        "scd-type2",
+        "analytics"
+    ]
+}

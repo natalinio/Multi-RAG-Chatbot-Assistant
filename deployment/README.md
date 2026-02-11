@@ -1,7 +1,7 @@
 # Azure Deployment Directory
-# ALMA ETL Chatbot - GDA Project
+# CORTEX - Cognitive Orchestration & Retrieval Technology EXpert
 
-This directory contains the automated deployment script and documentation for deploying ALMA to Azure App Service.
+This directory contains the automated deployment script and documentation for deploying CORTEX to Azure App Service.
 
 ## 📁 Files Overview
 

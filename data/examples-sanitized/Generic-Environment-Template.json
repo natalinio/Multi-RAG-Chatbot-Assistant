@@ -1,0 +1,42 @@
+{
+    "domain": "GenericDomain",
+    "description": "Generic environment configuration template (anonymized)",
+    "markets": [
+        {
+            "market": "US",
+            "source": {
+                "name": "GenericSourceSystem",
+                "connection": {
+                    "server": "your-server.database.windows.net",
+                    "database": "your_database_name",
+                    "user": "your_username",
+                    "secret": "YOUR-KEYVAULT-SECRET-NAME",
+                    "trust_certificate": true,
+                    "port": 1433
+                }
+            }
+        },
+        {
+            "market": "EU",
+            "source": {
+                "name": "GenericSourceSystem",
+                "connection": {
+                    "server": "your-eu-server.database.windows.net",
+                    "database": "your_eu_database",
+                    "user": "your_username",
+                    "secret": "YOUR-EU-KEYVAULT-SECRET",
+                    "trust_certificate": true,
+                    "port": 1433
+                }
+            }
+        }
+    ],
+    "comment": "⚠️ SECURITY NOTE: Never commit real connection strings. Use Key Vault references and environment variables.",
+    "instructions": [
+        "Replace 'your-server.database.windows.net' with your actual server",
+        "Update 'your_database_name' with your database name",
+        "Store credentials in Azure Key Vault",
+        "Reference secrets using placeholder names",
+        "Use managed identities when possible"
+    ]
+}

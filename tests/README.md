@@ -1,202 +1,204 @@
 # Tests Directory
 
-This folder contains all tests and verification scripts for the ETL chatbot.
+This directory contains test files for CORTEX. Test files are separated into **public** (generic patterns) and **private** (client-specific) categories for security.
 
-## 📋 Test Files
+---
 
-### Azure Services Tests
-- **`test_azure_services.py`** - Connectivity tests for Azure OpenAI, Cosmos DB, Azure AI Search
-- **`test_azure_search.py`** - Specific tests for Azure AI Search
-- **`test_kernel_functions.py`** - Tests for Semantic Kernel functions
-- **`test_rag_extended.py`** - Extended tests for RAG (Retrieval Augmented Generation)
-- **`test_no_hallucination.py`** - Verify response accuracy and absence of hallucinations
-- **`test_reindexed_search.py`** - Tests after reindexing with semantic titles
-- **`test_sink_retrieval.py`** - Tests for sink configuration queries
+## 📂 Test File Structure
 
-### Advanced Features Tests
-- **`test_count_direct.py`** - Application-side counting tests (Cosmos DB limitations workaround)
-- **`test_validations_high_priority.py`** - Pre-execution validation tests (HIGH PRIORITY)
-- **`test_semantic_title_ranking.py`** - Semantic title ranking tests
-- **`test_count_configurations.py`** - Tests for count_configurations() function
-- **`test_cosmos_comprehensive.py`** - Comprehensive Cosmos DB plugin tests
+### ✅ **Public Tests** (Committed to GitHub)
 
-### Verification Scripts
-- **`check_asql_docs.py`** - Verify ASQL documentation indexed
-- **`check_index_content.py`** - Analyze Azure AI Search index content
-- **`show_semantic_titles.py`** - Display all generated semantic titles
+Generic test patterns demonstrating Azure integration:
 
-## 🚀 How to Run Tests
+- **`test_azure_services.py`** - Tests connectivity to Azure OpenAI, Cosmos DB, and Azure AI Search
+- **`test_azure_search.py`** - Azure AI Search functionality tests
+- **`test_local_health.py`** - Health endpoint verification
+- **`test_imports.py`** - Python dependency verification
+
+### ⚠️ **Private Tests** (Local Only - Not Committed)
+
+Tests containing client-specific domain names and configurations:
+
+- `test_cosmos_comprehensive.py`
+- `test_validations_high_priority.py`
+- `test_token_management.py`
+- `test_semantic_title_ranking.py`
+- `test_kernel_functions.py`
+- `test_no_hallucination.py`
+- `test_reindexed_search.py`
+- `test_sink_retrieval.py`
+- `test_rag_extended.py`
+- `test_count_*.py`
+- `check_*.py`
+- `show_semantic_titles.py`
+- `test_asql_integration.py`
+
+These files remain in your local workspace but are excluded from Git via `.gitignore`.
+
+---
+
+## 🚀 Running Tests
 
 ### Prerequisites
-```bash
-# Make sure the virtual environment is active
-source venv/bin/activate  # Linux/Mac
-.\venv\Scripts\Activate.ps1  # Windows PowerShell
 
-# Verify all dependencies are installed
+```powershell
+# Activate virtual environment
+.\venv\Scripts\Activate.ps1
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Configure environment variables (copy .env.example to .env and fill in your Azure credentials)
+```
+
+### Run Public Tests
+
+```powershell
+# Test Azure services connectivity
+python tests/test_azure_services.py
+
+# Test Azure AI Search
+python tests/test_azure_search.py
+
+# Test health endpoint (requires app running)
+python tests/test_local_health.py
+
+# Test imports
+python tests/test_imports.py
+```
+
+### Run All Tests (Local Development)
+
+```powershell
+# Run all tests including private ones
+pytest tests/ -v
+
+# Run specific test
+pytest tests/test_azure_services.py -v
+```
+
+---
+
+## 🔐 Security Considerations
+
+### Environment Variables
+
+**All tests use environment variables from `.env` file - never hardcode credentials.**
+
+**Example:**
+```python
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
+api_key = os.getenv("AZURE_OPENAI_API_KEY")
+```
+
+### Configuration Template
+
+Use `.env.example` as a template:
+
+```bash
+cp tests/.env.example .env
+# Edit .env with your actual credentials
+```
+
+**Required variables:** `AZURE_OPENAI_API_KEY`, `AZURE_OPENAI_ENDPOINT`, `COSMOS_DB_ENDPOINT`, `COSMOS_DB_KEY`, `AZURE_AI_SEARCH_ENDPOINT`, `AZURE_AI_SEARCH_KEY`
+
+### Adding New Tests
+
+**For public tests** (safe to commit):
+- Use generic placeholder names
+- Load all credentials from environment variables
+- No client-specific domain references
+
+**For private tests** (local only):
+- Can use real domain names for accurate testing
+- Automatically excluded via `.gitignore` patterns
+
+---
+
+## 📊 Test Categories
+
+| Category | Public | Private | Total |
+|----------|--------|---------|-------|
+| Azure Integration | 2 | 0 | 2 |
+| Health & Imports | 2 | 0 | 2 |
+| RAG & Search | 0 | 5 | 5 |
+| Cosmos DB | 0 | 3 | 3 |
+| Validation | 0 | 2 | 2 |
+| Utilities | 0 | 3 | 3 |
+| **Total** | **4** | **13** | **17** |
+
+---
+
+## 📝 Test Output Examples
+
+### Successful Azure Services Test
+```
+============================================================
+Testing Azure OpenAI Connection
+============================================================
+Endpoint: https://your-resource.openai.azure.com/
+API Version: 2024-12-01-preview
+Model Name: gpt-4o
+
+Testing chat completion...
+✅ Azure OpenAI: SUCCESS
+
+============================================================
+Testing Azure Cosmos DB Connection
+============================================================
+Endpoint: https://your-cosmos.documents.azure.com:443/
+Database: metadata
+Container: configurations
+
+✅ Cosmos DB: SUCCESS (Connected to metadata/configurations)
+
+============================================================
+Testing Azure AI Search Connection
+============================================================
+Endpoint: https://your-search.search.windows.net
+Index: your-index-name
+
+✅ Azure AI Search: SUCCESS (Index contains 150 documents)
+```
+
+---
+
+## 🆘 Troubleshooting
+
+### Missing Dependencies
+```powershell
 pip install -r requirements.txt
 ```
 
-### Run All Tests with pytest
-```bash
-# From project root
-python -m pytest tests/ -v
+### Environment Variables Not Loaded
+```powershell
+# Verify .env file exists
+Test-Path .env
 
-# With detailed output
-python -m pytest tests/ -v -s
-
-# Specific tests only
-python -m pytest tests/test_azure_services.py -v
+# Check environment variables
+python -c "from dotenv import load_dotenv; import os; load_dotenv(); print(os.getenv('AZURE_OPENAI_ENDPOINT'))"
 ```
 
-### Run Individual Tests
-```bash
-cd tests
+### Connection Errors
+1. Verify credentials in `.env` file
+2. Check Azure resource endpoints are correct
+3. Ensure firewall rules allow your IP
+4. Verify API keys haven't expired
 
-# Test Azure services
-python test_azure_services.py
+---
 
-# Test application-side counting
-python test_count_direct.py
+## 📚 Related Documentation
 
-# Test pre-execution validations
-python test_validations_high_priority.py
+- [Azure OpenAI Documentation](https://learn.microsoft.com/azure/ai-services/openai/)
+- [Cosmos DB Best Practices](https://learn.microsoft.com/azure/cosmos-db/)
+- [Azure AI Search Documentation](https://learn.microsoft.com/azure/search/)
+- [Main README](../README.md)
 
-# Test semantic title ranking
-python test_semantic_title_ranking.py
+---
 
-# Verify ASQL documentation
-python check_asql_docs.py
-
-# Analyze index
-python check_index_content.py
-
-# Show semantic titles
-python show_semantic_titles.py
-```
-
-### Quick Test (from root)
-```bash
-# Runs a quick verification suite
-python quick_test.py
-```
-
-### HIGH PRIORITY Validations Test
-```bash
-# Complete tests for all implemented validations
-python test_validations_high_priority.py
-
-# Expected output:
-# ✅ TEST A: COUNT() blocked in query_existing_config
-# ✅ TEST A bis: GROUP BY blocked
-# ✅ TEST E: COUNT() blocked in filter
-# ✅ TEST H: Invalid domain with suggestions
-# ✅ TEST H bis: Valid domain accepted
-# ✅ TEST I: Empty search blocked
-# ✅ TEST I bis: Whitespace blocked
-# 🎉 ALL TESTS PASSED (7/7)
-```
-
-## 📊 Test Structure
-
-### Integration Tests
-Verify integration with Azure services:
-- Azure OpenAI connectivity (GPT-4o)
-- Cosmos DB access
-- Azure AI Search queries
-- RAG plugin functionality
-
-### Content Tests
-Verify indexing quality:
-- ASQL documentation presence
-- Chunk completeness
-- Optimal chunk size (2000-4000 chars)
-- Complete JSON configurations
-
-### Accuracy Tests
-Verify that responses are:
-- Based on real data
-- Without hallucinations
-- Complete and detailed
-- Correct according to documentation
-
-### Advanced Features Tests
-Verify newly implemented features:
-- **Application-Side Counting**: Configuration counting despite Cosmos DB limitations
-- **Pre-Execution Validations**: Input validation before execution
-  - Block unsupported SQL aggregations
-  - Domain validation with fuzzy matching
-  - Block empty requests
-- **Semantic Titles**: Improved ranking with descriptive semantic titles
-
-## 🔧 Configuration
-
-Tests require the `.env` file to be configured with:
-```env
-AZURE_OPENAI_ENDPOINT=...
-AZURE_OPENAI_API_KEY=...
-AZURE_AI_SEARCH_ENDPOINT=...
-AZURE_AI_SEARCH_KEY=...
-COSMOS_DB_ENDPOINT=...
-COSMOS_DB_KEY=...
-```
-
-## 📝 Notes
-
-- **Import Path**: Tests use `sys.path.insert(0, ...)` to import modules from root
-- **Encoding**: All JSON files are read with `encoding='utf-8'`
-- **Async Tests**: Some tests use `asyncio` to test asynchronous functions
-- **Exit Codes**: Tests return 0 (success) or 1 (failure)
-
-## 🎯 Expected Results
-
-### ✅ Passed Tests
-```
-✅ All Tests Passed: 4/4 (100%)
-
-- Repository Structure: OK
-- Processed Content: 41 documents with semantic titles
-- ASQL Documentation: Found in multiple chunks
-- Environment: Configured with all required entries
-```
-
-### ✅ Validations Tests (test_validations_high_priority.py)
-```
-🎉 ALL TESTS PASSED (7/7)
-
-✅ Validation A: COUNT() blocked in query_existing_config
-✅ Validation A bis: GROUP BY blocked  
-✅ Validation E: COUNT() blocked in filter
-✅ Validation H: Invalid domain with suggestions
-✅ Validation H bis: Valid domain accepted
-✅ Validation I: Empty search blocked
-✅ Validation I bis: Whitespace blocked
-```
-
-### ✅ Counting Tests (test_count_direct.py)
-```
-✅ NielsenGB Count: 110 configurations
-   - Unique markets: 5 (Config, RTD, SparklingWine, Spirits, Vermouth)
-
-✅ Total Count: 1750 configurations
-   - Unique domains: 34
-   - Unique layers: 5 (Bronze, Silver, Gold, Interface, Staging)
-   - Unique markets: 36
-```
-
-### ❌ Common Issues
-
-**ModuleNotFoundError: No module named 'azure.search'**
-- Solution: Activate virtual environment and install dependencies
-
-**FileNotFoundError: processed_content.json**
-- Solution: Run `python data/process_document_optimized.py`
-
-**KeyError in .env**
-- Solution: Copy `.env.example` to `.env` and configure
-
-## 🔗 Links
-
-- [Architecture Documentation](../docs/ARCHITECTURE.md)
-- [Token Management](../docs/TOKEN_MANAGEMENT_SOLUTION.md)
-- [Recent Improvements](../docs/RECENT_IMPROVEMENTS.md)
+**Note:** Private test files are kept locally for development but automatically excluded from Git commits for security. See `.gitignore` for the complete list of excluded patterns.

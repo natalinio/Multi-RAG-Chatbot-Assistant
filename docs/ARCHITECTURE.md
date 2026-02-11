@@ -63,14 +63,14 @@ graph TB
 ### Component Descriptions
 
 #### User Interface Layer
-- **Web Browser**: The chat interface where users interact with ALMA by typing questions and receiving answers in real-time.
+- **Web Browser**: The chat interface where users interact with CORTEX by typing questions and receiving answers in real-time.
 
 #### Application Layer
 - **FastAPI App (main.py)**: The main web server that handles incoming requests and serves the frontend. It acts as the entry point for all user interactions.
 - **Router (api/router.py)**: Routes incoming chat messages to the appropriate processing logic and manages conversation sessions for each user.
 
 #### Orchestration Layer
-- **Kernel Factory (kernel_factory.py)**: Sets up and configures all the components needed for the AI assistant to work. Think of it as the "startup configuration" for ALMA.
+- **Kernel Factory (kernel_factory.py)**: Sets up and configures all the components needed for the AI assistant to work. Think of it as the "startup configuration" for CORTEX.
 - **Semantic Kernel**: The brain coordinator that decides when to search documentation, query databases, or ask the AI for help based on what the user needs.
 
 #### Custom Plugins (The "Tools")
@@ -143,7 +143,7 @@ sequenceDiagram
 
 ### Core Files
 - **[app/main.py](../app/main.py)**: FastAPI application entry point
-- **[app/api/router.py](../app/api/router.py)**: Chat endpoints & session management with ALMA personality
+- **[app/api/router.py](../app/api/router.py)**: Chat endpoints & session management with CORTEX personality
 - **[app/core/kernel_factory.py](../app/core/kernel_factory.py)**: Semantic Kernel initialization
 
 ### Plugins
@@ -177,17 +177,18 @@ sequenceDiagram
 - **[data/process_document_optimized.py](../data/process_document_optimized.py)**: Main document processor with semantic title generation
 - **[data/reindex_search.py](../data/reindex_search.py)**: Azure AI Search indexing with semantic configuration
 
-## ALMA Personality
+## CORTEX Personality
 
-**ALMA** (Advanced Learning & Metadata Assistant) is the chatbot's branded identity with distinct personality traits:
+**CORTEX** (Cognitive Orchestration & Retrieval Technology EXpert) is the chatbot's branded identity with distinct personality traits:
 
 - **Professional** with a youthful, fresh approach
 - **Enthusiastic** and proactive in solving problems
 - **Engaging** - guides users step-by-step with clear examples
 - **Celebratory** when tackling challenges together
 - **Entrepreneurial** - proposes innovative solutions
+- **Intelligent Routing** - automatically determines optimal data sources
 
-The ALMA personality is configured in the `SYSTEM_PROMPT` variable in [app/api/router.py](../app/api/router.py).
+The CORTEX personality is configured in the `SYSTEM_PROMPT` variable in [app/api/router.py](../app/api/router.py).
 
 ## Pre-Execution Validations
 
