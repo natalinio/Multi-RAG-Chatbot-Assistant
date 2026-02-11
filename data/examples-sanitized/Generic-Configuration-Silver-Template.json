@@ -1,0 +1,81 @@
+{
+    "domain": "DomainB",
+    "entity": "Aggregation-DomainB-Silver-GlobalMarket",
+    "layer": "Silver",
+    "process_requested": "transformation",
+    "market": "GLB",
+    "partition": [
+        "GLB"
+    ],
+    "dependencyInbound": [
+        "EntitySource1-DomainB-Bronze-GLB",
+        "EntitySource2-DomainB-Bronze-GLB"
+    ],
+    "dependencyOutbound": [
+        "Aggregation-DomainB-Gold-GLB"
+    ],
+    "I0_common_conf": {
+        "use-case": "data-transformation",
+        "prcs-name": "silver-aggregation-process",
+        "table_name": "aggregated_entity"
+    },
+    "T1_transformation_process": {
+        "type": "transformation",
+        "transformation_type": "aggregation",
+        "aggregation_rules": [
+            {
+                "source_column": "metric_value",
+                "aggregation": "SUM",
+                "target_column": "total_metric"
+            },
+            {
+                "source_column": "record_id",
+                "aggregation": "COUNT",
+                "target_column": "record_count"
+            }
+        ],
+        "group_by": [
+            "dimension1",
+            "dimension2",
+            "time_period"
+        ]
+    },
+    "T2_data_quality": {
+        "type": "validation",
+        "validation_rules": [
+            {
+                "rule": "not_null",
+                "columns": [
+                    "dimension1",
+                    "time_period"
+                ]
+            },
+            {
+                "rule": "range_check",
+                "column": "total_metric",
+                "min": 0,
+                "max": 1000000
+            }
+        ]
+    },
+    "D3_load_data_process": {
+        "type": "data_write_process",
+        "mode-of-write": "upsert",
+        "target-path": "catalog.schema.silver_aggregated_table",
+        "merge_keys": [
+            "dimension1",
+            "dimension2",
+            "time_period"
+        ],
+        "partition-by": [
+            "time_period"
+        ]
+    },
+    "description": "Generic Silver layer transformation with aggregation and validation",
+    "tags": [
+        "silver",
+        "transformation",
+        "aggregation",
+        "data-quality"
+    ]
+}

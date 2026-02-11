@@ -155,12 +155,20 @@ $RECYCLE.BIN/
 *.azurePubxml
 *.azurePubxml.user
 
-# Local data files
+# Local data files (CLIENT-SPECIFIC DATA - NEVER COMMIT)
 *.xlsx
-*.docx
 *.csv
+
+# ⚠️ CRITICAL: Exclude client-specific data directories
+data/examples/*.json
+data/examples/*.docx
+data/examples/*.xlsx
+data/examples/*.csv
 data/processed/
 data/temp/
+data/archived/
+
+# Note: data/README.md and data/examples-sanitized/ ARE tracked and committed
 
 # Logs
 logs/

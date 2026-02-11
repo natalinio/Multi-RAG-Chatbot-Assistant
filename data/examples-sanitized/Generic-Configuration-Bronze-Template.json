@@ -1,0 +1,56 @@
+{
+    "domain": "DomainA",
+    "entity": "EntityName-DomainA-Bronze-MarketCode",
+    "layer": "Bronze",
+    "process_requested": "ingestion",
+    "market": "US",
+    "partition": [
+        "US",
+        "CategoryA"
+    ],
+    "dependencyInbound": [],
+    "dependencyOutbound": [
+        "EntityName-DomainA-Silver-US"
+    ],
+    "I0_common_conf": {
+        "use-case": "generic-use-case",
+        "prcs-name": "bronze-ingestion-process",
+        "table_name": "entity_table_name"
+    },
+    "I1_data_extract_process": {
+        "type": "data_read_process",
+        "source": {
+            "type": "asql",
+            "path": "schema.source_table",
+            "extraction_type": "Incremental",
+            "custom_query": "",
+            "filter_condition": "",
+            "update_datetime_column": "last_modified_date",
+            "update_datetime_format": "yyyy-MM-dd HH:mm:ss",
+            "comment": "Azure SQL source - incremental load based on timestamp"
+        }
+    },
+    "I2_data_ingestion": {
+        "type": "data_write_process",
+        "ingestion-mode": "overwrite",
+        "partition-by": [
+            "market_code",
+            "category"
+        ]
+    },
+    "D3_load_data_process": {
+        "type": "data_write_process",
+        "mode-of-write": "overwrite",
+        "target-path": "catalog.schema.bronze_entity_table",
+        "partition-by": [
+            "market_code"
+        ]
+    },
+    "description": "Generic Bronze layer configuration template for batch ingestion from Azure SQL",
+    "tags": [
+        "bronze",
+        "ingestion",
+        "batch",
+        "incremental"
+    ]
+}
