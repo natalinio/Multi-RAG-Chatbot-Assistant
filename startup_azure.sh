@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "🚀 Starting ALMA ETL Chatbot on Azure Web App..."
+echo "🚀 Starting CORTEX on Azure Web App..."
 
 # 1. Navigate to the app root directory
 cd /home/site/wwwroot

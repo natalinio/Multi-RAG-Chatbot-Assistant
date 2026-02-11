@@ -1,6 +1,6 @@
-# Contributing to ALMA - Advanced Learning & Metadata Assistant
+# Contributing to CORTEX - Cognitive Orchestration & Retrieval Technology EXpert
 
-Thank you for your interest in contributing to ALMA! This document explains how to contribute to this project.
+Thank you for your interest in contributing to CORTEX! This document explains how to contribute to this project.
 
 ## 🔒 Repository Access Policy
 
@@ -233,7 +233,7 @@ This project follows:
 
 ## 🙏 Thank You
 
-Thank you for contributing to ALMA! Your efforts help make this project better for everyone.
+Thank you for contributing to CORTEX! Your efforts help make this project better for everyone.
 
 ---
 

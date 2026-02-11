@@ -1,6 +1,6 @@
-# 🚀 ALMA ETL Chatbot - Azure Deployment Guide
+# 🚀 CORTEX - Azure Deployment Guide
 
-Complete guide for deploying ALMA to Azure App Service using the automated PowerShell script.
+Complete guide for deploying CORTEX to Azure App Service using the automated PowerShell script.
 
 ---
 
@@ -148,9 +148,9 @@ https://your-app-name.azurewebsites.net/docs
 
 Try these chat interactions:
 
-1. **ALMA Personality Test**
+1. **CORTEX Personality Test**
    - Ask: "Who are you?"
-   - Expected: ALMA introduces herself with personality traits
+   - Expected: CORTEX introduces itself with personality traits
 
 2. **RAG Documentation Test**
    - Ask: "How to configure Bronze layer ingestion?"
@@ -298,4 +298,4 @@ For deployment issues:
 
 ---
 
-**🎉 Success! ALMA is now live on Azure and ready for production use!**
+**🎉 Success! CORTEX is now live on Azure and ready for production use!**

@@ -3,7 +3,7 @@
 This document summarizes the major improvements and features implemented in January 2025.
 
 ## Table of Contents
-1. [ALMA Personality](#alma-personality)
+1. [CORTEX Personality](#cortex-personality)
 2. [Application-Side Counting](#application-side-counting)
 3. [Pre-Execution Validations](#pre-execution-validations)
 4. [Semantic Titles](#semantic-titles)
@@ -11,10 +11,10 @@ This document summarizes the major improvements and features implemented in Janu
 
 ---
 
-## ALMA Personality
+## CORTEX Personality
 
 ### Overview
-The chatbot now has a distinct brand identity as **ALMA** (Advanced Learning & Metadata Assistant).
+The chatbot now has a distinct brand identity as **CORTEX** (Cognitive Orchestration & Retrieval Technology EXpert).
 
 ### Personality Traits
 - **Professional** with a youthful, fresh approach
@@ -22,6 +22,7 @@ The chatbot now has a distinct brand identity as **ALMA** (Advanced Learning & M
 - **Engaging** - guides users step-by-step with clear examples
 - **Celebratory** when tackling challenges together! 🎉
 - **Entrepreneurial** - proposes innovative solutions
+- **Intelligent Routing** - automatically determines optimal data sources
 
 ### Implementation
 - **Location**: `app/api/router.py` (SYSTEM_PROMPT variable, lines 41-87)
@@ -31,7 +32,9 @@ The chatbot now has a distinct brand identity as **ALMA** (Advanced Learning & M
 ### User Experience
 ```
 User: "Who are you?"
-ALMA: "🎯 Hi! I'm ALMA (Advanced Learning & Metadata Assistant), 
+CORTEX: "🎯 Hi! I'm CORTEX (Cognitive Orchestration & Retrieval Technology EXpert), 
+        your intelligent agentic assistant! I bring energy and 
+        professionalism to help you with multi-source data retrieval..." 
        your intelligent ETL assistant! I bring energy and 
        professionalism to help you with ETL configurations..."
 ```
@@ -264,7 +267,7 @@ Entity: "table_property"
 
 #### Core Application
 1. **app/api/router.py**
-   - Lines 41-87: ALMA personality SYSTEM_PROMPT
+   - Lines 41-87: CORTEX personality SYSTEM_PROMPT
    - Language: English
    - Style: Professional, youthful, enthusiastic
 
@@ -302,7 +305,7 @@ Entity: "table_property"
 
 #### Documentation
 9. **docs/ARCHITECTURE.md**
-   - Added ALMA personality section
+   - Added CORTEX personality section
    - Added Pre-Execution Validations section
    - Added Application-Side Counting section
    - Updated plugin descriptions
@@ -334,14 +337,14 @@ All improvements have been tested:
 | Validation H (Domain Validation) | test_validations_high_priority.py | ✅ PASS | Fuzzy matching suggestions |
 | Validation I (Empty Search) | test_validations_high_priority.py | ✅ PASS | Example questions provided |
 | Semantic Titles | test_semantic_title_ranking.py | ✅ PASS | Improved ranking |
-| ALMA Personality | Manual testing | ⏳ PENDING | Web interface testing |
+| CORTEX Personality | Manual testing | ⏳ PENDING | Web interface testing |
 
 ---
 
 ## Benefits & Impact
 
 ### User Experience
-- ✅ **ALMA personality**: Memorable, engaging brand identity
+- ✅ **CORTEX personality**: Memorable, engaging brand identity with intelligent orchestration
 - ✅ **Clear error messages**: Helpful guidance instead of technical errors
 - ✅ **Fuzzy matching**: Suggests correct values for typos
 - ✅ **Better search**: Semantic titles improve relevance
@@ -384,7 +387,8 @@ All improvements have been tested:
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 1.3.0 | January 2025 | ALMA personality, counting, validations, semantic titles |
+| 2.0.0 | February 2026 | Rebranded to CORTEX, enhanced adaptability guide |
+| 1.3.0 | January 2025 | CORTEX personality, counting, validations, semantic titles |
 | 1.2.0 | January 2025 | Token management improvements |
 | 1.1.0 | December 2024 | RAG implementation with Azure AI Search |
 | 1.0.0 | November 2024 | Initial release |
