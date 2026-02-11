@@ -239,3 +239,6 @@ tests/check_*.py
 # Deployment logs
 deploy-logs/
 deploy-logs-minimal/
+
+# readminternal
+README-INTERNAL.md
